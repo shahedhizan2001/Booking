@@ -240,7 +240,7 @@ class _BookingHotelState extends State<BookingHotel> {
                                         CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "Room - 1",
+                                            "Room - 2",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold),
                                           ),
@@ -312,7 +312,7 @@ class _BookingHotelState extends State<BookingHotel> {
                                   child: Row(
                                     children: [
                                       Text(
-                                        "1 Room * 1 night",
+                                        "2 Room * 1 night",
                                       ),
                                       RSizedBox(width: 170),
                                       Text(

@@ -149,7 +149,7 @@ class _MapSecreenState extends State<MapSecreen> {
               mapType: MapType.normal,
               initialCameraPosition: CameraPosition(
                 target: LatLng(city[0]['x'], city[0]['y']), //city
-                zoom: 5.5,
+                zoom: 10.0,
               ),
               onMapCreated: (GoogleMapController controller) async {
                 for (int i = 0; i < widget.hotel.length; i++) {

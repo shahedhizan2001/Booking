@@ -519,8 +519,10 @@ class _SearchButtonState extends State<SearchButton> {
                   select2 == null ||
                   select3 == null ||
                   cubit.selectedPayment.length==0||
-                  selectedDate == null ||
-                  selectedDate2 == null) {
+                  selectedDate == null
+                  // ||
+                  // selectedDate2 == null
+              ) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text('This information can not be empty ! '),
                   duration: Duration(seconds: 10),

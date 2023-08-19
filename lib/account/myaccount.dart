@@ -1,14 +1,13 @@
 import 'package:booking/account/payment.dart';
 import 'package:booking/account/profile.dart';
-import 'package:booking/account/region.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../commen/theme/global_functions.dart';
 import '../commen/theme/light_color_schema.dart';
 import '../hotel/app_bar.dart';
 import '../hotel/elevated/hotel_secreen_cubit.dart';
 import '../hotel/elevated/hotel_secreen_state.dart';
+import '../screens/From_Countries_page.dart';
 import 'currency.dart';
 import 'help.dart';
 import 'login.dart';
@@ -26,13 +25,6 @@ class booking extends StatefulWidget {
 class bookingstate extends State<booking> {
   String? lang;
   String selectedCountry = "syria";
-  String selectedCurrency = "SP";
-  String _selectedLanguage = 'English';
-  final String _paymentType = 'Select payment type';
-  final List<String> _selectedPayments = [];
-
-  final List<String> currencies = ['USD', 'SYP'];
-
   String? ValueNotifier;
 
   @override
@@ -96,7 +88,7 @@ class bookingstate extends State<booking> {
                     onTap: () async {
                       final result = await Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => region()),
+                        MaterialPageRoute(builder: (context) => FromCountriesPage()),
                       );
                       if (result != null) {
                         setState(() {
@@ -117,92 +109,18 @@ class bookingstate extends State<booking> {
                     Icon(Icons.attach_money, color: lightColorScheme.primary),
                     title: const Text("Currency"),
                     trailing: const Icon(Icons.chevron_right),
-                    subtitle: Text(selectedCurrency),
-                    onTap: () async {
-                      final result = await Navigator.push(
+                    subtitle:  cubit.selectedCurrency.isNotEmpty
+                        ? Text(cubit.selectedCurrency.last)
+                        : null,
+                    onTap: ()  {
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CurrencyListPage(currencies)),
+                            builder: (context) => CurrencyListPage()),
                       );
-                      if (result != null) {
-                        setState(() {
-                          selectedCurrency = result;
-                        });
-                      }
                     },
                   ),
                 ),
-                Container(
-                  decoration: const BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(
-                            width: 1, color: Color.fromRGBO(241, 241, 241, 1))),
-                  ),
-                  child: ListTile(
-                    leading: Icon(Icons.language, color: lightColorScheme.primary),
-                    title: const Text("Language"),
-                    trailing: const Icon(Icons.chevron_right),
-                    subtitle: Text(_selectedLanguage),
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          String selectedLanguage = "English";
-                          return AlertDialog(
-                            title: const Text("Select Language"),
-                            content: StatefulBuilder(
-                              builder:
-                                  (BuildContext context, StateSetter setState) {
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    RadioListTile(
-                                      title: const Text("English"),
-                                      value: "English",
-                                      groupValue: selectedLanguage,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          selectedLanguage = value!;
-                                        });
-                                      },
-                                    ),
-                                    RadioListTile(
-                                      title: const Text("العربية"),
-                                      value: "العربية",
-                                      groupValue: selectedLanguage,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          selectedLanguage = value!;
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                child: const Text("OK"),
-                                onPressed: () {
-                                  Navigator.pop(context, selectedLanguage);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      ).then((selectedLanguage) {
-                        if (selectedLanguage != null) {
-                          setState(() {
-                            _selectedLanguage = selectedLanguage;
-                          });
-                        }
-                      });
-                    },
-                  ),
-                ),
-                //
-                // في حالة البداية، قم بتعيين القيمة المختارة بقيمة افتراضية فارغة
-
                 Container(
                   decoration: const BoxDecoration(
                     border: Border(
@@ -223,14 +141,11 @@ class bookingstate extends State<booking> {
                       final result = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => PaymentSelectionPage(),
+                          builder: (context) => PaymentSelectionPage(con: true),
                         ),
                       );
-                      setState(() {
-                        if (result != null && result is String) {
-                          cubit.selectedPayment.last = result;
-                        }
-                      });
+                      if(result!=null)
+                        cubit.changepayment(result);
                     },
                   ),
                 ),

@@ -52,6 +52,16 @@ class FilterPriceState extends HotelSecreenStates {}
 
 class countRoomState extends HotelSecreenStates {}
 
-class selectCurrentState extends HotelSecreenStates {}
-
 class UpdateReservationState extends HotelSecreenStates {}
+
+class selectedCurrencyState extends HotelSecreenStates {}
+
+class ChangepaymentState extends HotelSecreenStates {}
+
+class ChangeCurrencyState extends HotelSecreenStates {}
+
+class updateDropdownValue1State extends HotelSecreenStates {}
+
+class updateDropdownValue2State extends HotelSecreenStates {}
+
+class updateDropdownValue3State extends HotelSecreenStates {}

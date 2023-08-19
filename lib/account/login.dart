@@ -70,7 +70,7 @@ class _LoginState extends State<Login> {
                   context,
                   MaterialPageRoute(
                       builder: (BuildContext context) => BasePage()),
-                  (route) => false,
+                      (route) => false,
                 );
               },
               icon: Icon(
@@ -168,16 +168,16 @@ class _LoginState extends State<Login> {
                           if (user != null) {
                             widget.con == true
                                 ? Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            BasePage()),
-                                    (route) => false,
-                                  )
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      BasePage()),
+                                  (route) => false,
+                            )
                                 : Navigator.of(context)
-                                    .push(MaterialPageRoute(builder: (context) {
-                                    return PaymentSelectionPage();
-                                  }));
+                                .push(MaterialPageRoute(builder: (context) {
+                              return PaymentSelectionPage(con: false,);
+                            }));
                           }
                         },
                         child: Text(

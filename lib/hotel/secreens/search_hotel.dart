@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:booking/hotel/secreens/room_in_hotel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:connectivity/connectivity.dart';
-
 import '../../commen/theme/light_color_schema.dart';
 import '../elevated/hotel_secreen_cubit.dart';
 import '../elevated/hotel_secreen_state.dart';
@@ -60,9 +58,7 @@ class _SearchHotelState extends State<SearchHotel> {
         });
       });
     });
-
     avg = List<double>.filled(hotel.length, 0);
-
     for (int i = 0; i < hotel.length; i++) {
       List avgPrice = [];
       await refR
@@ -81,11 +77,12 @@ class _SearchHotelState extends State<SearchHotel> {
       }
 
       setState(() {
-        avg[i] = sum / avgPrice.length;
+        avg[i] = sum / avgPrice.length.toInt();
       });
     }
-    avg2 = avg;
+    return avg;
   }
+
 
   Future<void> getSort(String x, int star, double priceFilter) async {
     if (x == 'Lowest price') {
@@ -174,7 +171,8 @@ class _SearchHotelState extends State<SearchHotel> {
           });
         }
       });
-    } else if (x == "Filter") {
+    } else
+    if (x == "Filter") {
       List<Map<String, dynamic>> filteredHotels = [];
 
       if (star == 0) {
@@ -193,8 +191,7 @@ class _SearchHotelState extends State<SearchHotel> {
               context: context,
               builder: (context) => AlertDialog(
                 title: Text("No Hotels Found"),
-                content:
-                    Text("There are no hotels with the selected criteria."),
+                content: Text("There are no hotels with the selected criteria."),
                 actions: [
                   TextButton(
                     child: Text("OK"),
@@ -214,6 +211,7 @@ class _SearchHotelState extends State<SearchHotel> {
             .get()
             .then((value) {
           setState(() {
+
             hotel = value.docs.map((doc) => doc.data()).toList();
 
             hasHotelsWithSelectedStars = hotel.isNotEmpty;
@@ -221,23 +219,8 @@ class _SearchHotelState extends State<SearchHotel> {
               showLoadingIndicator = false;
             else
               showLoadingIndicator = true;
-            if (hotel.isEmpty) {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: Text("No Hotels Found"),
-                  content: Text("There are no Hotels with $star stars."),
-                  actions: [
-                    TextButton(
-                      child: Text("OK"),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                ),
-              );
-            }
+
+
           });
         }).then((_) {
           // Update avg list based on the new order
@@ -254,6 +237,7 @@ class _SearchHotelState extends State<SearchHotel> {
                 y = element.data();
                 avgPrice.add(y['price']);
               });
+
 
               double sum = 0;
               for (int j = 0; j < avgPrice.length; j++) {
@@ -272,14 +256,33 @@ class _SearchHotelState extends State<SearchHotel> {
                 filteredHotels.add(hotel[i]);
               }
             }
-
             setState(() {
               hotel = filteredHotels;
             });
+            if (hotel.isEmpty) {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text("No Hotels Found"),
+                  content: Text("There are no hotels with $star stars ${filteredHotels.isEmpty} and less than ${priceFilter.toInt()} " ),
+                  actions: [
+                    TextButton(
+                      child: Text("OK"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
+              );
+            }
+
+
           });
         });
       }
     }
+
   }
 
   @override
@@ -410,7 +413,6 @@ class _SearchHotelState extends State<SearchHotel> {
                             builder: (context) => BlocBuilder<HotelSecreenCubit,
                                 HotelSecreenStates>(
                               builder: (context, state) {
-                                //cubit.selectedSort.clear();
                                 return SingleChildScrollView(
                                   child: Column(
                                     children: [
@@ -495,16 +497,18 @@ class _SearchHotelState extends State<SearchHotel> {
                       padding: const EdgeInsets.only(right: 20, left: 20),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
+
                         child: GestureDetector(
                           onTap: () async {
-                            getHotel();
-                            avg.sort();
+                            List avg2 =[];
+                            avg2 = await getHotel();
+                            avg2.sort();
                             Map<String, dynamic>? result = await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => FilterSecreen(
-                                  minPrice: avg[0],
-                                  maxPrice: avg[avg.length - 1],
+                                  minPrice: avg2[0],
+                                  maxPrice: avg2[avg.length - 1],
                                 ),
                               ),
                             );
@@ -512,8 +516,8 @@ class _SearchHotelState extends State<SearchHotel> {
                             if (result != null) {
                               int selectedNumStar = result['numStar'];
                               double priceFilter = result['price'];
-                              await getSort(
-                                  "Filter", selectedNumStar, priceFilter);
+                              await getSort("Filter", selectedNumStar, priceFilter);
+
                             }
                           },
                           child: Row(
@@ -524,6 +528,8 @@ class _SearchHotelState extends State<SearchHotel> {
                             ],
                           ),
                         ),
+
+
                       ),
                     ),
                     Container(
@@ -536,12 +542,9 @@ class _SearchHotelState extends State<SearchHotel> {
                       child: GestureDetector(
                         onTap: () =>
                             Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => MapSecreen(
-                              city: widget.city,
-                              country: widget.country,
-                              avg: avg,
-                              hotel: hotel),
-                        )),
+                              builder: (context) => MapSecreen(city: widget.city,
+                                  country: widget.country,avg: avg,hotel: hotel),
+                            )),
                         child: Row(children: [
                           Icon(Icons.map_outlined),
                           RSizedBox(
@@ -559,311 +562,311 @@ class _SearchHotelState extends State<SearchHotel> {
                       height: 550,
                       child: isInternetConnected
                           ? hotel.isNotEmpty
-                              ? ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  itemCount: hotel.length,
-                                  itemBuilder: (context, i) {
-                                    return InkWell(
-                                        onTap: () {
-                                          var imagesHotel = [
-                                            "${hotel[i]['image']}",
-                                            "${hotel[i]['image1']}",
-                                            "${hotel[i]['image2']}",
-                                            "${hotel[i]['image3']}",
-                                            "${hotel[i]['image4']}",
-                                            "${hotel[i]['image5']}",
-                                          ];
-                                          Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                            builder: (context) {
-                                              return Hotel(
-                                                cityHotel:
-                                                    "${hotel[i]['city']}",
-                                                nameHotel:
-                                                    "${hotel[i]['name']}",
-                                                image: imagesHotel,
-                                                star: hotel[i]['star'],
-                                                edit: false,
-                                              );
-                                            },
-                                          ));
-                                        },
-                                        child: Card(
-                                          clipBehavior: Clip.antiAlias,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20.r),
-                                            // side: BorderSide(color: Colors.),
-                                          ),
-                                          child: Row(children: [
-                                            Image(
-                                              image: NetworkImage(
-                                                "${hotel[i]['image']}",
+                          ? ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: hotel.length,
+                          itemBuilder: (context, i) {
+                            return InkWell(
+                                onTap: () {
+                                  var imagesHotel = [
+                                    "${hotel[i]['image']}",
+                                    "${hotel[i]['image1']}",
+                                    "${hotel[i]['image2']}",
+                                    "${hotel[i]['image3']}",
+                                    "${hotel[i]['image4']}",
+                                    "${hotel[i]['image5']}",
+                                  ];
+                                  Navigator.of(context)
+                                      .push(MaterialPageRoute(
+                                    builder: (context) {
+                                      return Hotel(
+                                        cityHotel:
+                                        "${hotel[i]['city']}",
+                                        nameHotel:
+                                        "${hotel[i]['name']}",
+                                        image: imagesHotel,
+                                        star: hotel[i]['star'],
+                                        edit: false,
+                                      );
+                                    },
+                                  ));
+                                },
+                                child: Card(
+                                  clipBehavior: Clip.antiAlias,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(20.r),
+                                    // side: BorderSide(color: Colors.),
+                                  ),
+                                  child: Row(children: [
+                                    Image(
+                                      image: NetworkImage(
+                                        "${hotel[i]['image']}",
+                                      ),
+                                      height: 280.h,
+                                      width: 125.w,
+                                      fit: BoxFit.fitHeight,
+                                    ),
+                                    RSizedBox(
+                                      width: 10,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${hotel[i]['name']}",
+                                          style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.bold,
+                                              color: Colors.black),
+                                        ),
+                                        Row(
+                                          children: [
+                                            Card(
+                                              child: Padding(
+                                                padding:
+                                                const EdgeInsets
+                                                    .all(6.0),
+                                                child: Text(
+                                                  "Hotel",
+                                                  textAlign:
+                                                  TextAlign.center,
+                                                ),
                                               ),
-                                              height: 280.h,
-                                              width: 125.w,
-                                              fit: BoxFit.fitHeight,
+                                              color: Colors.white,
+                                              shape:
+                                              RoundedRectangleBorder(
+                                                  borderRadius:
+                                                  BorderRadius
+                                                      .circular(
+                                                      7)),
                                             ),
                                             RSizedBox(
-                                              width: 10,
+                                              width: 2,
                                             ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                            SizedBox(
+                                              height: 20,
+                                              width: 100,
+                                              child:
+                                              SingleChildScrollView(
+                                                scrollDirection:
+                                                Axis.horizontal,
+                                                child: Row(
+                                                  children: [
+                                                    ListView.builder(
+                                                        scrollDirection:
+                                                        Axis
+                                                            .horizontal,
+                                                        itemCount:
+                                                        hotel[i][
+                                                        'star'],
+                                                        shrinkWrap:
+                                                        true,
+                                                        itemBuilder:
+                                                            (context,
+                                                            index) {
+                                                          return Icon(
+                                                              Icons
+                                                                  .star,
+                                                              size: 14,
+                                                              color: Colors
+                                                                  .yellow);
+                                                        }),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Stack(
+                                              children: [
+                                                Positioned(
+                                                    child: Padding(
+                                                      padding:
+                                                      const EdgeInsets
+                                                          .all(8.0),
+                                                      child: Container(
+                                                        color: Colors.green,
+                                                        width: 30.w,
+                                                        height: 24.h,
+                                                      ),
+                                                    )),
+                                                Positioned(
+                                                    left: 12.w,
+                                                    top: 12.h,
+                                                    child: Center(
+                                                      child: Text(
+                                                        "${hotel[i]['evaluation']}",
+                                                        style:
+                                                        TextStyle(
+                                                          fontWeight:
+                                                          FontWeight
+                                                              .bold,
+                                                          color: Colors
+                                                              .white,
+                                                        ),
+                                                      ),
+                                                    ))
+                                              ],
+                                            ),
+                                            Row(
                                               children: [
                                                 Text(
-                                                  "${hotel[i]['name']}",
+                                                  "Excellent",
                                                   style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.black),
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Card(
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(6.0),
-                                                        child: Text(
-                                                          "Hotel",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                        ),
-                                                      ),
-                                                      color: Colors.white,
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          7)),
-                                                    ),
-                                                    RSizedBox(
-                                                      width: 2,
-                                                    ),
-                                                    SizedBox(
-                                                      height: 20,
-                                                      width: 100,
-                                                      child:
-                                                          SingleChildScrollView(
-                                                        scrollDirection:
-                                                            Axis.horizontal,
-                                                        child: Row(
-                                                          children: [
-                                                            ListView.builder(
-                                                                scrollDirection:
-                                                                    Axis
-                                                                        .horizontal,
-                                                                itemCount:
-                                                                    hotel[i][
-                                                                        'star'],
-                                                                shrinkWrap:
-                                                                    true,
-                                                                itemBuilder:
-                                                                    (context,
-                                                                        index) {
-                                                                  return Icon(
-                                                                      Icons
-                                                                          .star,
-                                                                      size: 14,
-                                                                      color: Colors
-                                                                          .yellow);
-                                                                }),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Stack(
-                                                      children: [
-                                                        Positioned(
-                                                            child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Container(
-                                                            color: Colors.green,
-                                                            width: 30.w,
-                                                            height: 24.h,
-                                                          ),
-                                                        )),
-                                                        Positioned(
-                                                            left: 12.w,
-                                                            top: 12.h,
-                                                            child: Center(
-                                                              child: Text(
-                                                                "${hotel[i]['evaluation']}",
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                              ),
-                                                            ))
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        Text(
-                                                          "Excellent",
-                                                          style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: Colors.green,
-                                                          ),
-                                                        ),
-                                                        RSizedBox(
-                                                          width: 8,
-                                                        ),
-                                                        Text(
-                                                            "${hotel[i]['Rate']} rating",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .grey)),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                                Text(
-                                                  "${hotel[i]['distance']} km from city centre of ${hotel[i]['city']}",
-                                                  style: TextStyle(
-                                                      color: Colors.black45,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      fontSize: 13),
-                                                ),
-                                                Card(
-                                                  elevation: 0,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.r)),
-                                                  color: Color.fromARGB(
-                                                      255, 238, 255, 239),
-                                                  //color: Colors.green,
-                                                  child: RPadding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            3.0),
-                                                    child: Column(
-                                                      children: [
-                                                        Text("Free cacellation",
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .green,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400,
-                                                                fontSize: 16)),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                Card(
-                                                  elevation: 0,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.r)),
-                                                  color: lightColorScheme
-                                                      .secondaryContainer,
-                                                  //color: Colors.green,
-                                                  child: RPadding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            3.0),
-                                                    child: Visibility(
-                                                      visible:
-                                                          "${hotel[i]['covid']}" !=
-                                                              "no",
-                                                      child: Text(
-                                                        "COVID-19 safety info",
-                                                        style: TextStyle(
-                                                            color:
-                                                                lightColorScheme
-                                                                    .primary,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            fontSize: 16),
-                                                      ),
-                                                    ),
+                                                    fontWeight:
+                                                    FontWeight.bold,
+                                                    color: Colors.green,
                                                   ),
                                                 ),
                                                 RSizedBox(
-                                                  height: 10,
+                                                  width: 8,
                                                 ),
-                                                Row(
-                                                  children: [
-                                                    RSizedBox(
-                                                      width: 100,
+                                                Text(
+                                                    "${hotel[i]['Rate']} rating",
+                                                    style: TextStyle(
+                                                        color: Colors
+                                                            .grey)),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        Text(
+                                          "${hotel[i]['distance']} km from city centre of ${hotel[i]['city']}",
+                                          style: TextStyle(
+                                              color: Colors.black45,
+                                              fontWeight:
+                                              FontWeight.normal,
+                                              fontSize: 13),
+                                        ),
+                                        Card(
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  8.r)),
+                                          color: Color.fromARGB(
+                                              255, 238, 255, 239),
+                                          //color: Colors.green,
+                                          child: RPadding(
+                                            padding:
+                                            const EdgeInsets.all(
+                                                3.0),
+                                            child: Column(
+                                              children: [
+                                                Text("Free cacellation",
+                                                    style: TextStyle(
+                                                        color: Colors
+                                                            .green,
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .w400,
+                                                        fontSize: 16)),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Card(
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  8.r)),
+                                          color: lightColorScheme
+                                              .secondaryContainer,
+                                          //color: Colors.green,
+                                          child: RPadding(
+                                            padding:
+                                            const EdgeInsets.all(
+                                                3.0),
+                                            child: Visibility(
+                                              visible:
+                                              "${hotel[i]['covid']}" !=
+                                                  "no",
+                                              child: Text(
+                                                "COVID-19 safety info",
+                                                style: TextStyle(
+                                                    color:
+                                                    lightColorScheme
+                                                        .primary,
+                                                    fontWeight:
+                                                    FontWeight.w400,
+                                                    fontSize: 16),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        RSizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          children: [
+                                            RSizedBox(
+                                              width: 100,
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment
+                                                  .end,
+                                              children: [
+                                                avg[i] == 0.0
+                                                    ? Container(
+                                                  child: Center(
+                                                    child:
+                                                    SpinKitCircle(
+                                                      color: Colors
+                                                          .blue,
+                                                      size: 15.0,
                                                     ),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .end,
-                                                      children: [
-                                                        avg[i] == 0.0
-                                                            ? Container(
-                                                                child: Center(
-                                                                  child:
-                                                                      SpinKitCircle(
-                                                                    color: Colors
-                                                                        .blue,
-                                                                    size: 15.0,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            : Text(
-                                                                "${avg[i].toStringAsFixed(2)}",
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize:
-                                                                      16.sp,
-                                                                  color: lightColorScheme
-                                                                      .primary,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                ),
-                                                              ),
-                                                        Text(
-                                                          "Total for 1 night",
-                                                          style: TextStyle(
-                                                              fontSize: 16.sp,
-                                                              color: Colors
-                                                                  .black45,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ],
+                                                  ),
+                                                )
+                                                    : Text(
+                                                  "${avg[i].toInt()}",
+                                                  style:
+                                                  TextStyle(
+                                                    fontSize:
+                                                    16.sp,
+                                                    color: lightColorScheme
+                                                        .primary,
+                                                    fontWeight:
+                                                    FontWeight
+                                                        .bold,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "Total for 1 night",
+                                                  style: TextStyle(
+                                                      fontSize: 16.sp,
+                                                      color: Colors
+                                                          .black45,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .normal),
                                                 )
                                               ],
                                             ),
-                                          ]),
-                                        ));
-                                  })
-                              : Center(
-                                  child: SpinKitWanderingCubes(
-                                    color: Colors.blue,
-                                    size: 50.0,
-                                  ),
-                                )
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ]),
+                                ));
+                          })
+                          : Center(
+                        child: SpinKitWanderingCubes(
+                          color: Colors.blue,
+                          size: 50.0,
+                        ),
+                      )
                           : NoInternetSecreen(
-                              onRetry: () {
-                                checkInternetAvailability();
-                              },
-                            )),
+                        onRetry: () {
+                          checkInternetAvailability();
+                        },
+                      )),
                 ),
               ]),
             ]));

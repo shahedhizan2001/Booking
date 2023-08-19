@@ -1,4 +1,5 @@
 
+import 'package:booking/commen/theme/light_color_schema.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import '../hotel/secreens/base_page.dart';
@@ -17,7 +18,7 @@ class _FinishPageState extends State<FinishPage> {
   void initState() {
     super.initState();
     // تأخير انتقال الصفحة بعد مرور 6 ثواني
-    Future.delayed(Duration(seconds: 10), () {
+    Future.delayed(Duration(seconds: 8), () {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => BasePage()),
@@ -28,7 +29,7 @@ class _FinishPageState extends State<FinishPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0XFF1baedf),
+      backgroundColor: lightColorScheme.primary,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -48,11 +49,11 @@ class _FinishPageState extends State<FinishPage> {
                   WavyAnimatedText('Congratulations',
                       textStyle: TextStyle(
                           fontWeight: FontWeight.w700, fontSize: 40),
-                      speed: Duration(milliseconds: 150)),
+                      speed: Duration(milliseconds: 120)),
                   WavyAnimatedText('Your registration has been completed !',
                       textAlign: TextAlign.center,
                       textStyle: TextStyle(fontWeight: FontWeight.w800),
-                      speed: Duration(milliseconds: 150)),
+                      speed: Duration(milliseconds: 120)),
                 ],
                 isRepeatingAnimation: true,
                 totalRepeatCount: 100,

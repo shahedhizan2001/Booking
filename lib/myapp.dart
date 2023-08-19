@@ -16,6 +16,7 @@ import 'hotel/secreens/base_page.dart';
 import 'hotel/secreens/go.dart';
 import 'hotel/secreens/image_room.dart';
 import 'hotel/secreens/option_secreen.dart';
+import 'hotel/secreens/splashscreen.dart';
 
 
 class MyApp extends StatelessWidget {
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
             'FlightPage': (context) => FlightPage(),
             'PassangersPage': (context) => PassangersPage(),
             'CabinClassPage': (context) => CabinClassPage(),
-            'TypePaymentPage': (context) => PaymentSelectionPage(),
+            'TypePaymentPage': (context) => PaymentSelectionPage(con: true),
             'RegPage': (context) => RegPage(edit: false),
             'PassportPage': (context) => InfoPassportPage(edit: false),
             'BasePage':(context)=>BasePage(),
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
             'OptionSecreen': (context) => OptionSecreen(),
             'ImageRoom': (context) => ImageSecreen(images: [],)
           },
-          home: BasePage(),
+          home: splash_screen(),
           debugShowCheckedModeBanner: false,
           theme: getAppTheme(ThemeMode.light, context),
         );

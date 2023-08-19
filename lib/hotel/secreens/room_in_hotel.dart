@@ -121,8 +121,6 @@ class _HotelState extends State<Hotel> {
                             ElevatedButton(
                               onPressed: () {
                                 cubit.chooseDateRangePicker(context: context);
-
-
                               },
                               child: Row(
                                 children: [

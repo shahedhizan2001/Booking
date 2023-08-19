@@ -12,10 +12,13 @@ class HotelSecreenCubit extends Cubit<HotelSecreenStates> {
   static HotelSecreenCubit get(context) => BlocProvider.of(context);
 
   double price=700;
-  String current = "USD";
   int roomSelectionCount = 0;
   List<String> selectedPayment=[];
+  List<String> selectedCurrency=['USB'];
   List<String> selectedSort = [];
+  String? dropdownValue1;
+  String? dropdownValue2;
+  String? dropdownValue3;
   bool isChecked = false;
   bool isCardVisible = false;
   bool isButtonVisible = true;
@@ -555,12 +558,25 @@ class HotelSecreenCubit extends Cubit<HotelSecreenStates> {
     print ("$roomSelectionCount");
     emit(countRoomState());
   }
+  changepayment(String value){
+    selectedPayment.add(value);
+    emit(ChangepaymentState());
+  }
+  changeCurrency(String value){
+    selectedCurrency.add(value);
+    emit(ChangeCurrencyState());
+  }
+  updateDropdownValue1(String ?value){
+    dropdownValue1 = value;
+    emit(updateDropdownValue1State());
+  }
+  updateDropdownValue2(String? value){
+    dropdownValue2 = value;
+    emit(updateDropdownValue2State());
+  }
+  updateDropdownValue3(String? value){
+    dropdownValue3 = value;
+    emit(updateDropdownValue3State());
+  }
 
-  Current(value){
-    current = value;
-    emit(selectCurrentState());
-  }
-  updateReservation(){
-    emit(UpdateReservationState());
-  }
 }
