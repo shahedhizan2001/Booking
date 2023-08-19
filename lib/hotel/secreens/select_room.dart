@@ -374,25 +374,44 @@ class _RoomSectionState extends State<RoomSection> {
                                                                 1 &&
                                                             cubit.num_room ==
                                                                 1) {
-                                                          Navigator.of(context)
-                                                              .push(
-                                                                  MaterialPageRoute(
-                                                            builder: (context) {
-                                                              return isAuth ==
-                                                                      false
-                                                                  ? Login(
+                                                          if(cubit.countA1!=0){
+                                                            Navigator.of(context)
+                                                                .push(
+                                                                MaterialPageRoute(
+                                                                  builder: (context) {
+                                                                    return isAuth ==
+                                                                        false
+                                                                        ? Login(
                                                                       total: Room[
-                                                                              index]
-                                                                          [
-                                                                          'price'],
+                                                                      index]
+                                                                      [
+                                                                      'price'],
                                                                       con:
-                                                                          false,
+                                                                      false,
                                                                     )
-                                                                  : PaymentSelectionPage(
-                                                                      total:
-                                                                          totalPrice);
-                                                            },
-                                                          ));
+                                                                        : PaymentSelectionPage(
+                                                                        total:
+                                                                        totalPrice);
+                                                                  },
+                                                                ));
+                                                          }
+                                                          else if (cubit.countA1 == 0) {
+                                                            showDialog(
+                                                              context: context,
+                                                              builder: (BuildContext context) {
+                                                                return AlertDialog(
+                                                                  content: Text("you must be select number of guest"),
+                                                                  actions: [
+                                                                    TextButton(
+                                                                      onPressed: () => Navigator.pop(context),
+                                                                      child: Text("Ok"),
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              },
+                                                            );
+                                                          }
+
                                                           cubit.roomSelectionCount =
                                                               0;
                                                         }

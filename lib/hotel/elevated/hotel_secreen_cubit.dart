@@ -52,7 +52,7 @@ class HotelSecreenCubit extends Cubit<HotelSecreenStates> {
   }
 
   isCardVisibility() {
-    if (selectedAge1.length != 0 || countA1 != 0) isCardVisible = true;
+    if (countA1 != 0) isCardVisible = true;
     emit(IsCardVisibilityState());
   }
 
@@ -64,6 +64,7 @@ class HotelSecreenCubit extends Cubit<HotelSecreenStates> {
   isButtonVisibility() {
     if (isCardVisible) {
       num_room = 2;
+      countA2=1;
       isButtonVisible = false;
     } else
       isButtonVisible = true;
@@ -92,12 +93,12 @@ class HotelSecreenCubit extends Cubit<HotelSecreenStates> {
   }
 
   decrementA() {
-    if (countA1 != 0) countA1--;
+    if (countA1 != 1) countA1--;
     emit(DecrementAState());
   }
 
   decrementB() {
-    if (countA2 != 0) countA2--;
+    if (countA2 != 1) countA2--;
     emit(DecrementBState());
   }
 
@@ -558,5 +559,8 @@ class HotelSecreenCubit extends Cubit<HotelSecreenStates> {
   Current(value){
     current = value;
     emit(selectCurrentState());
+  }
+  updateReservation(){
+    emit(UpdateReservationState());
   }
 }

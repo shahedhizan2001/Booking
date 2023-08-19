@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:booking/hotel/secreens/room_in_hotel.dart';
@@ -50,7 +49,6 @@ class _SearchHotelState extends State<SearchHotel> {
 
   List<double> avg = [];
 
-
   getHotel() async {
     avg = [];
     hotel = [];
@@ -88,7 +86,6 @@ class _SearchHotelState extends State<SearchHotel> {
     }
     avg2 = avg;
   }
-
 
   Future<void> getSort(String x, int star, double priceFilter) async {
     if (x == 'Lowest price') {
@@ -177,10 +174,8 @@ class _SearchHotelState extends State<SearchHotel> {
           });
         }
       });
-    } else
-      if (x == "Filter") {
+    } else if (x == "Filter") {
       List<Map<String, dynamic>> filteredHotels = [];
-
 
       if (star == 0) {
         getHotel().then((_) {
@@ -198,7 +193,8 @@ class _SearchHotelState extends State<SearchHotel> {
               context: context,
               builder: (context) => AlertDialog(
                 title: Text("No Hotels Found"),
-                content: Text("There are no hotels with the selected criteria."),
+                content:
+                    Text("There are no hotels with the selected criteria."),
                 actions: [
                   TextButton(
                     child: Text("OK"),
@@ -284,7 +280,6 @@ class _SearchHotelState extends State<SearchHotel> {
         });
       }
     }
-
   }
 
   @override
@@ -415,6 +410,7 @@ class _SearchHotelState extends State<SearchHotel> {
                             builder: (context) => BlocBuilder<HotelSecreenCubit,
                                 HotelSecreenStates>(
                               builder: (context, state) {
+                                //cubit.selectedSort.clear();
                                 return SingleChildScrollView(
                                   child: Column(
                                     children: [
@@ -499,8 +495,7 @@ class _SearchHotelState extends State<SearchHotel> {
                       padding: const EdgeInsets.only(right: 20, left: 20),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-
-                       child: GestureDetector(
+                        child: GestureDetector(
                           onTap: () async {
                             getHotel();
                             avg.sort();
@@ -517,8 +512,8 @@ class _SearchHotelState extends State<SearchHotel> {
                             if (result != null) {
                               int selectedNumStar = result['numStar'];
                               double priceFilter = result['price'];
-                              await getSort("Filter", selectedNumStar, priceFilter);
-
+                              await getSort(
+                                  "Filter", selectedNumStar, priceFilter);
                             }
                           },
                           child: Row(
@@ -529,8 +524,6 @@ class _SearchHotelState extends State<SearchHotel> {
                             ],
                           ),
                         ),
-
-
                       ),
                     ),
                     Container(
@@ -543,9 +536,12 @@ class _SearchHotelState extends State<SearchHotel> {
                       child: GestureDetector(
                         onTap: () =>
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => MapSecreen(city: widget.city,
-                                country: widget.country,avg: avg,hotel: hotel),
-                            )),
+                          builder: (context) => MapSecreen(
+                              city: widget.city,
+                              country: widget.country,
+                              avg: avg,
+                              hotel: hotel),
+                        )),
                         child: Row(children: [
                           Icon(Icons.map_outlined),
                           RSizedBox(

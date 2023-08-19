@@ -39,7 +39,6 @@ class MyApp extends StatelessWidget {
             'TypePaymentPage': (context) => PaymentSelectionPage(),
             'RegPage': (context) => RegPage(edit: false),
             'PassportPage': (context) => InfoPassportPage(edit: false),
-            'BagsPage': (context) => BagsPage(),
             'BasePage':(context)=>BasePage(),
             'FinishPage': (context) => FinishPage(),
             'HomeSecreen': (context) => SectionHome(),

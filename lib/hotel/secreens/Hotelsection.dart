@@ -82,7 +82,7 @@ class _HotelSectionState extends State<HotelSection> {
                   padding: const EdgeInsets.all(12.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => SearchDestination2()));
                     },
                     child: Row(

@@ -53,3 +53,5 @@ class FilterPriceState extends HotelSecreenStates {}
 class countRoomState extends HotelSecreenStates {}
 
 class selectCurrentState extends HotelSecreenStates {}
+
+class UpdateReservationState extends HotelSecreenStates {}

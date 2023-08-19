@@ -114,7 +114,7 @@ class _SearchDestination2State extends State<SearchDestination2> {
                 });
                 Future.delayed(const Duration(seconds: 1), () {
                   Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
+                      .pushReplacement(MaterialPageRoute(builder: (context) {
                     return HotelSection(
                       country: '${country[index]['country']}',
                       city: '${country[index]['city']}',
