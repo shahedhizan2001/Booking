@@ -10,7 +10,7 @@ class HotelSecreenCubit extends Cubit<HotelSecreenStates> {
   HotelSecreenCubit() : super(ElevatedInitial());
 
   static HotelSecreenCubit get(context) => BlocProvider.of(context);
-  AppLanguage selectedLanguage = AppLanguage.en;
+  String selectedLanguage = "English";
   double price=700;
   int roomSelectionCount = 0;
   List<String> selectedPayment=[];
@@ -579,8 +579,9 @@ class HotelSecreenCubit extends Cubit<HotelSecreenStates> {
     emit(updateDropdownValue3State());
   }
   Future<void> getSharedLanguage()async{
-  final cachedLanguageCode=await SharedPrefHelper.getLanguage() ;
-  emit(LanguageChangedStates(locale: Locale(cachedLanguageCode)));
+  selectedLanguage=await SharedPrefHelper.getLanguage() ;
+  emit(LanguageChangedStates(locale: Locale(selectedLanguage)));
+  print(selectedLanguage);
   }
   Future<void> changeLang(String appLanguageNext)async{
       await SharedPrefHelper.putLanguage(appLanguageNext);

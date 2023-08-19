@@ -71,8 +71,6 @@ class updateDropdownValue2State extends HotelSecreenStates {}
 class updateDropdownValue3State extends HotelSecreenStates {}
 
 class LanguageStates extends HotelSecreenStates {
-  final AppLanguage selectedLanguage;
-  LanguageStates({required this.selectedLanguage});
 }
 
 class LanguageChangedStates extends HotelSecreenStates {

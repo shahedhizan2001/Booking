@@ -30,7 +30,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HotelSecreenCubit, HotelSecreenStates>(
       builder: (context, state) {
+        HotelSecreenCubit cubit=HotelSecreenCubit.get(context);
         if (state is LanguageChangedStates) {
+          print(state.locale);
           return ScreenUtilInit(
             designSize: const Size(380, 700),
             minTextAdapt: true,
@@ -56,7 +58,7 @@ class MyApp extends StatelessWidget {
                         images: [],
                       )
                 },
-                locale: state.locale,
+                locale:state.locale,
                 localizationsDelegates: [
                   AppLocalizations.delegate, // Add this line
                   GlobalMaterialLocalizations.delegate,
