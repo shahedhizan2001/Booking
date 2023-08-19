@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "773954561774",
+    "project_id": "mynote-a1839",
+    "storage_bucket": "mynote-a1839.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773954561774:android:fba056821b1cdf670e75ff",
+        "android_client_info": {
+          "package_name": "com.hiba.note"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "773954561774-di774p121g86gfed47u4j6p6c832hvph.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFyCWH14ga7wlS_uUcqHmoABA7jYy5HFw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "773954561774-di774p121g86gfed47u4j6p6c832hvph.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
