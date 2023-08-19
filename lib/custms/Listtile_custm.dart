@@ -1,7 +1,6 @@
 import 'package:booking/custms/to_Country.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../commen/theme/light_color_schema.dart';
 import '../screens/RegPage.dart';
 import 'from_Country.dart';
@@ -281,7 +280,7 @@ class _CalenderState extends State<Calender> {
                 return Theme(
                     data: Theme.of(context).copyWith(
                         colorScheme:
-                        ColorScheme.light(primary: Color(0XFFe63946))),
+                        ColorScheme.light(primary:lightColorScheme.surfaceTint)),
                     child: child!);
               });
           if (picked != null && picked != selectedDate) {
@@ -361,7 +360,7 @@ class _calenderRState extends State<calenderR> {
                 return Theme(
                     data: Theme.of(context).copyWith(
                         colorScheme:
-                        ColorScheme.light(primary: Color(0XFFe63946))),
+                        ColorScheme.light(primary:lightColorScheme.surfaceTint)),
                     child: child!);
               });
           if (picked != null && picked != selectedDate2) {

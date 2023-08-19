@@ -15,6 +15,7 @@ import '../elevated/hotel_secreen_cubit.dart';
 import '../elevated/hotel_secreen_state.dart';
 import 'base_page.dart';
 import 'image_room.dart';
+
 class RoomSection extends StatefulWidget {
   RoomSection(
       {Key? key,
@@ -24,7 +25,7 @@ class RoomSection extends StatefulWidget {
       required this.image,
       this.star,
       this.checkIn,
-        this.checkOut,
+      this.checkOut,
       this.numNight,
       this.edit,
       this.reservationId})
@@ -65,23 +66,20 @@ bool? edit;
 String? reservationId;
 
 class _RoomSectionState extends State<RoomSection> {
-
-
   void _refreshPage() {
     setState(() {});
   }
-  CollectionReference roomRef =
-  FirebaseFirestore.instance.collection("room");
+
+  CollectionReference roomRef = FirebaseFirestore.instance.collection("room");
   List<Map<String, dynamic>> Room = [];
   CollectionReference reservationRef =
-  FirebaseFirestore.instance.collection("reservationHotel");
+      FirebaseFirestore.instance.collection("reservationHotel");
   List<String> availableRooms = [];
 
   getRoom() async {
     Room = [];
-    var roomQuerySnapshot = await roomRef
-        .where("hotelname", isEqualTo: widget.nameHotel)
-        .get();
+    var roomQuerySnapshot =
+        await roomRef.where("hotelname", isEqualTo: widget.nameHotel).get();
 
     for (var roomDocument in roomQuerySnapshot.docs) {
       var roomData = roomDocument.data() as Map<String, dynamic>;
@@ -97,21 +95,26 @@ class _RoomSectionState extends State<RoomSection> {
   }
 
   Future<bool> checkRoomAvailability(int roomId) async {
-    var reservationQuerySnapshot = await reservationRef
-        .where("id", isEqualTo: roomId)
-        .get();
+    var reservationQuerySnapshot =
+        await reservationRef.where("id", isEqualTo: roomId).get();
 
-    var reservations = reservationQuerySnapshot.docs.map((doc) => doc.data())
-        .toList();
+    var reservations =
+        reservationQuerySnapshot.docs.map((doc) => doc.data()).toList();
 
     for (var reservation in reservations) {
       var reservationData = reservation as Map<String, dynamic>;
-      var reservationCheckIn = DateFormat("d MMM, y").parse(reservationData['checkIn']);
-      var reservationCheckOut = DateFormat("d MMM, y").parse(reservationData['checkOut']);
+      var reservationCheckIn =
+          DateFormat("d MMM, y").parse(reservationData['checkIn']);
+      var reservationCheckOut =
+          DateFormat("d MMM, y").parse(reservationData['checkOut']);
 
       if (reservationCheckIn != null && reservationCheckOut != null) {
-        var isOverlapping = !(DateFormat("d MMM, y").parse(widget.checkOut!).isBefore(reservationCheckIn) ||
-            DateFormat("d MMM, y").parse(widget.checkIn!).isAfter(reservationCheckOut));
+        var isOverlapping = !(DateFormat("d MMM, y")
+                .parse(widget.checkOut!)
+                .isBefore(reservationCheckIn) ||
+            DateFormat("d MMM, y")
+                .parse(widget.checkIn!)
+                .isAfter(reservationCheckOut));
 
         if (isOverlapping) {
           return false;
@@ -121,6 +124,7 @@ class _RoomSectionState extends State<RoomSection> {
 
     return true;
   }
+
   @override
   void initState() {
     getUser();
@@ -128,7 +132,6 @@ class _RoomSectionState extends State<RoomSection> {
 
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +183,8 @@ class _RoomSectionState extends State<RoomSection> {
                                     width: 10,
                                   ),
                                   columnDetails(
-                                    title1: "Deluxe Room - ${Room[index]['numBed']} Bed",
+                                    title1:
+                                        "Deluxe Room - ${Room[index]['numBed']} Bed",
                                     title2: "${Room[index]['conditioning']}" ==
                                             "yes"
                                         ? "Conditioning"
@@ -276,7 +280,7 @@ class _RoomSectionState extends State<RoomSection> {
                                                         padding:
                                                             const EdgeInsets
                                                                 .all(5.0),
-                                                        child: Column(
+                                                        child:cubit.countA1!= 0 ?Column(
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
                                                                   .start,
@@ -309,11 +313,10 @@ class _RoomSectionState extends State<RoomSection> {
                                                                         fontWeight:
                                                                             FontWeight.bold),
                                                                   )
-
                                                                 : Text(
                                                                     cubit.current ==
                                                                             'USD'
-                                                                        ? "\$  ${( Room[index]['price']! * ((cubit.countA1 == 1) ? cubit.countA1 : cubit.countA1 / 1.5)).toInt()}"
+                                                                        ? "\$  ${(Room[index]['price']! * ((cubit.countA1 == 1) ? cubit.countA1 : cubit.countA1 / 1.5)).toInt()}"
                                                                         : "SYP  ${((Room[index]['price']! * 14500) * ((cubit.countA1 == 1) ? cubit.countA1 : cubit.countA1 / 1.5)).toInt()}",
                                                                     style: TextStyle(
                                                                         fontSize: 16
@@ -324,12 +327,15 @@ class _RoomSectionState extends State<RoomSection> {
                                                                             FontWeight.bold),
                                                                   ),
                                                           ],
-                                                        ),
+                                                        ):Text(""),
                                                       ),
                                                     ],
                                                   ),
+                                                  cubit.countA1!= 0 ?
                                                   const RSizedBox(
-                                                    width: 60,
+                                                     width:60,
+                                                  ):const RSizedBox(
+                                                    width:200,
                                                   ),
                                                   ElevatedButton(
                                                       onPressed: () async {
@@ -402,7 +408,7 @@ class _RoomSectionState extends State<RoomSection> {
                                                               return AlertDialog(
                                                                 // title: Text("warning"),
                                                                 content: Text(
-                                                                    "Please select another room"),
+                                                                    "you must be select another room"),
                                                                 actions: [
                                                                   TextButton(
                                                                     onPressed: () =>
@@ -428,13 +434,14 @@ class _RoomSectionState extends State<RoomSection> {
                                                             ['price'];
                                                         Room1 = cubit.num_room;
                                                         Adults = cubit
-                                                                    .num_room == 1
-
+                                                                    .num_room ==
+                                                                1
                                                             ? cubit.countA1
                                                             : cubit.countA1 +
                                                                 cubit.countA2;
                                                         children = cubit
-                                                                    .num_room == 1
+                                                                    .num_room ==
+                                                                1
                                                             ? cubit.selectedAge1
                                                                 .length
                                                             : cubit.selectedAge1
@@ -444,7 +451,8 @@ class _RoomSectionState extends State<RoomSection> {
                                                                     .length;
                                                         checkIn =
                                                             widget.checkIn;
-                                                        checkOut = widget.checkOut;
+                                                        checkOut =
+                                                            widget.checkOut;
                                                         star = widget.star;
                                                         numNight =
                                                             widget.numNight!;
@@ -610,11 +618,11 @@ addReservationHotel() {
       'priceNight': priceNight,
       'bed': bed,
       'image': image[0],
-      'image1':image[1],
-      'image2':image[2],
-      'image3':image[3],
-      'image4':image[4],
-      'image5':image[5],
+      'image1': image[1],
+      'image2': image[2],
+      'image3': image[3],
+      'image4': image[4],
+      'image5': image[5],
       'numRoom': Room1,
       'userId': getUser(),
       'star': star,
@@ -625,7 +633,6 @@ addReservationHotel() {
       'totalPrice': totalPrice,
       'id': id,
       'avaliable': false
-
     }).then((value) {
       reservationRef.doc(value.id).update({
         'reservationId': value.id,

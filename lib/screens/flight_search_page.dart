@@ -2,10 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../custms/CalenderR.dart';
 import '../custms/Listtile_custm.dart';
-import '../custms/Search_button.dart';
-import '../custms/calenderD.dart';
 class FlightPage extends StatelessWidget {
   FlightPage({Key? key}) : super(key: key);
 
@@ -52,6 +49,7 @@ class FlightPage extends StatelessWidget {
                     ),
                     push: 'ToCountriesPage',
                   ),
+                  const Calender(),
                   listtilePassanger(
                     text2: 'Passangers',
                     icons: const Icon(
@@ -101,6 +99,8 @@ class FlightPage extends StatelessWidget {
                       push: 'ToCountriesPage',
 
                     ),
+                    const Calender(),
+                    const calenderR(),
                     listtilePassanger(
                       text2: 'Passangers',
                       icons: const Icon(
@@ -133,7 +133,10 @@ class FlightPage extends StatelessWidget {
               ),
             ],
           ),
-      ),
+          bottomNavigationBar: SearchButton(
+            text: 'Search Flight',
+
+          )),
     );
   }
 }
