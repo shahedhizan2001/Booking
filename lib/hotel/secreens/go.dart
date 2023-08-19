@@ -1,4 +1,5 @@
 import 'package:booking/hotel/secreens/room_in_hotel.dart';
+import 'package:booking/l10n/app_localizations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -115,7 +116,7 @@ class _SectionHomeState extends State<SectionHome> {
                                   height: 40,
                                 ),
                                 Text(
-                                  "Flights",
+                                  AppLocalizations.of(context)!.flight,
                                   style: TextStyle(color: Colors.black),
                                 )
                               ],
@@ -150,7 +151,7 @@ class _SectionHomeState extends State<SectionHome> {
                                   height: 10,
                                 ),
                                 Text(
-                                  "Hotels",
+                                  AppLocalizations.of(context)!.hotel,
                                   style: TextStyle(color: Colors.black),
                                 )
                               ],

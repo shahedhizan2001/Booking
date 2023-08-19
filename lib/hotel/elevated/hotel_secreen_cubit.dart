@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../commen/theme/light_color_schema.dart';
+import '../secreens/sharedpref.dart';
 import 'hotel_secreen_state.dart';
-
 class HotelSecreenCubit extends Cubit<HotelSecreenStates> {
   HotelSecreenCubit() : super(ElevatedInitial());
 
   static HotelSecreenCubit get(context) => BlocProvider.of(context);
-
+  AppLanguage selectedLanguage = AppLanguage.en;
   double price=700;
   int roomSelectionCount = 0;
   List<String> selectedPayment=[];
@@ -578,5 +578,12 @@ class HotelSecreenCubit extends Cubit<HotelSecreenStates> {
     dropdownValue3 = value;
     emit(updateDropdownValue3State());
   }
-
+  Future<void> getSharedLanguage()async{
+  final cachedLanguageCode=await SharedPrefHelper.getLanguage() ;
+  emit(LanguageChangedStates(locale: Locale(cachedLanguageCode)));
+  }
+  Future<void> changeLang(String appLanguageNext)async{
+      await SharedPrefHelper.putLanguage(appLanguageNext);
+      emit(LanguageChangedStates(locale: Locale(appLanguageNext)));
+  }
 }

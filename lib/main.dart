@@ -9,5 +9,5 @@ void main() async {
   await Firebase.initializeApp();
 
   runApp(BlocProvider<HotelSecreenCubit>(
-      create: (context) => HotelSecreenCubit(), child: MyApp()));
+      create: (context) => HotelSecreenCubit()..getSharedLanguage(), child: MyApp()));
 }

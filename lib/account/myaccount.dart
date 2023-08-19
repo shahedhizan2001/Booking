@@ -7,9 +7,9 @@ import '../commen/theme/light_color_schema.dart';
 import '../hotel/app_bar.dart';
 import '../hotel/elevated/hotel_secreen_cubit.dart';
 import '../hotel/elevated/hotel_secreen_state.dart';
-import '../screens/From_Countries_page.dart';
 import 'currency.dart';
 import 'help.dart';
+import 'language.dart';
 import 'login.dart';
 
 class booking extends StatefulWidget {
@@ -24,8 +24,8 @@ class booking extends StatefulWidget {
 
 class bookingstate extends State<booking> {
   String? lang;
-  String selectedCountry = "syria";
   String? ValueNotifier;
+  String _selectedLanguage = 'English';
 
   @override
   Widget build(BuildContext context) {
@@ -75,32 +75,6 @@ class bookingstate extends State<booking> {
                 Container(
                   decoration: const BoxDecoration(
                     border: Border(
-                        top: BorderSide(
-                            width: 7, color: Color.fromRGBO(241, 241, 241, 1)),
-                        bottom: BorderSide(
-                            width: 1, color: Color.fromRGBO(241, 241, 241, 1))),
-                  ),
-                  child: ListTile(
-                    leading: Icon(Icons.flag, color: lightColorScheme.primary),
-                    title: const Text("Region"),
-                    trailing: const Icon(Icons.chevron_right),
-                    subtitle: Text(selectedCountry),
-                    onTap: () async {
-                      final result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => FromCountriesPage()),
-                      );
-                      if (result != null) {
-                        setState(() {
-                          selectedCountry = result;
-                        });
-                      }
-                    },
-                  ),
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    border: Border(
                         bottom: BorderSide(
                             width: 1, color: Color.fromRGBO(241, 241, 241, 1))),
                   ),
@@ -121,6 +95,7 @@ class bookingstate extends State<booking> {
                     },
                   ),
                 ),
+                LanguagePage(),
                 Container(
                   decoration: const BoxDecoration(
                     border: Border(
@@ -188,3 +163,16 @@ class bookingstate extends State<booking> {
     );
   }
 }
+extension languageHandler on AppLanguage{
+String get getLangName{
+   switch(this){
+     case AppLanguage.ar:return "العربية";
+     case AppLanguage.en:return "English";
+   }
+}
+}
+enum AppLanguage{
+  ar,
+  en
+}
+

@@ -1,3 +1,7 @@
+import 'dart:ui';
+
+import 'package:booking/account/language.dart';
+
 abstract class HotelSecreenStates {}
 
 class ElevatedInitial extends HotelSecreenStates {}
@@ -65,3 +69,18 @@ class updateDropdownValue1State extends HotelSecreenStates {}
 class updateDropdownValue2State extends HotelSecreenStates {}
 
 class updateDropdownValue3State extends HotelSecreenStates {}
+
+class LanguageStates extends HotelSecreenStates {
+  final AppLanguage selectedLanguage;
+  LanguageStates({required this.selectedLanguage});
+}
+
+class LanguageChangedStates extends HotelSecreenStates {
+  final Locale locale;
+  LanguageChangedStates({required this.locale});
+}
+
+enum AppLanguage {
+  ar,
+  en,
+}
